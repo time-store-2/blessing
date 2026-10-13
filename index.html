@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux 1er Anniversaire ! 🎉</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #ede9fe 50%, #dbeafe 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .font-pacifico {
+            font-family: 'Pacifico', cursive;
+        }
+        /* Floating balloons */
+        @keyframes float {
+            0% { transform: translateY(0vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: float 8s infinite ease-in;
+            z-index: 10;
+        }
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 18px;
+            width: 2px;
+            height: 15px;
+            background: rgba(0,0,0,0.2);
+        }
+        /* Candle flame flicker */
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            50% { transform: scale(1.1) rotate(2deg); opacity: 1; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8)); }
+        }
+        .flame {
+            animation: flicker 0.8s infinite alternate;
+        }
+    </style>
+</head>
+<body class="relative text-gray-800">
+
+    <!-- Floating Balloons Container -->
+    <div id="balloon-container" class="fixed inset-0 pointer-events-none overflow-hidden z-20"></div>
+
+    <!-- Header / Hero Section -->
+    <header class="relative py-16 px-4 text-center overflow-hidden">
+        <div class="max-w-4xl mx-auto z-10 relative">
+            <span class="inline-block bg-pink-200 text-pink-800 text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm mb-4 animate-bounce">
+                🎂 Aujourd'hui c'est ta fête !
+            </span>
+            <h1 class="font-pacifico text-5xl md:text-7xl text-pink-600 drop-shadow-md mb-4">
+                Joyeux 1er Anniversaire !
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-700 font-medium max-w-2xl mx-auto mb-8">
+                1 an déjà ! Que cette première année remplie de sourires et de douceur ne soit que le début d'une vie merveilleuse. ✨
+            </p>
+
+            <!-- Interactive Cake & Candle Card -->
+            <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 max-w-md mx-auto border border-pink-100 mb-12">
+                <div class="text-6xl mb-4 select-none cursor-pointer transform hover:scale-105 transition-transform" onclick="triggerCelebration()">
+                    🎂
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Souffle ta bougie !</h3>
+                <p class="text-sm text-gray-600 mb-6">Clique sur le gâteau ou sur le bouton pour lancer la fête 🎉</p>
+
+                <!-- Animated Candle -->
+                <div class="flex justify-center items-center mb-6">
+                    <div class="relative flex flex-col items-center">
+                        <div id="candle-flame" class="w-4 h-8 bg-amber-400 rounded-full flame shadow-lg cursor-pointer" onclick="blowCandle()" title="Clique pour souffler !"></div>
+                        <div class="w-3 h-12 bg-gradient-to-r from-pink-400 to-pink-500 rounded-sm"></div>
+                    </div>
+                </div>
+
+                <button onclick="triggerCelebration()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition active:scale-95">
+                    Fêter mes 1 an ! 🎈
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Photo Gallery Section -->
+    <main class="max-w-6xl mx-auto px-4 pb-20">
+        <div class="text-center mb-12">
+            <h2 class="font-pacifico text-3xl md:text-5xl text-purple-600 mb-3">Souvenirs de ma 1ère année</h2>
+            <p class="text-gray-600 text-base md:text-lg">Clique sur une photo pour l'agrandir ! 🔍</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+            <!-- Photo 1 -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border border-purple-50 cursor-pointer" onclick="openModal('pictures/IMG-20261013-WA0000.jpg', 'Souvenir 1')">
+                <div class="overflow-hidden rounded-xl aspect-square bg-gray-100">
+                    <img src="pictures/IMG-20261013-WA0000.jpg" alt="Souvenir d'anniversaire 1" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-3 text-center">
+                    <span class="text-sm font-semibold text-pink-500">✨ Joyeux Anniversaire</span>
+                </div>
+            </div>
+
+            <!-- Photo 2 -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border border-purple-50 cursor-pointer" onclick="openModal('pictures/IMG-20261013-WA0001.jpg', 'Souvenir 2')">
+                <div class="overflow-hidden rounded-xl aspect-square bg-gray-100">
+                    <img src="pictures/IMG-20261013-WA0001.jpg" alt="Souvenir d'anniversaire 2" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-3 text-center">
+                    <span class="text-sm font-semibold text-purple-500">💖 1 an aujourd'hui</span>
+                </div>
+            </div>
+
+            <!-- Photo 3 -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border border-purple-50 cursor-pointer" onclick="openModal('pictures/IMG-20261013-WA0002.jpg', 'Souvenir 3')">
+                <div class="overflow-hidden rounded-xl aspect-square bg-gray-100">
+                    <img src="pictures/IMG-20261013-WA0002.jpg" alt="Souvenir d'anniversaire 3" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-3 text-center">
+                    <span class="text-sm font-semibold text-pink-500">🌟 Notre petite princesse</span>
+                </div>
+            </div>
+
+            <!-- Photo 4 -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border border-purple-50 cursor-pointer" onclick="openModal('pictures/IMG-20261013-WA0003.jpg', 'Souvenir 4')">
+                <div class="overflow-hidden rounded-xl aspect-square bg-gray-100">
+                    <img src="pictures/IMG-20261013-WA0003.jpg" alt="Souvenir d'anniversaire 4" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-3 text-center">
+                    <span class="text-sm font-semibold text-indigo-500">🎉 Des sourires magiques</span>
+                </div>
+            </div>
+
+            <!-- Photo 5 -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border border-purple-50 cursor-pointer" onclick="openModal('pictures/IMG-20261013-WA0004.jpg', 'Souvenir 5')">
+                <div class="overflow-hidden rounded-xl aspect-square bg-gray-100">
+                    <img src="pictures/IMG-20261013-WA0004.jpg" alt="Souvenir d'anniversaire 5" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-3 text-center">
+                    <span class="text-sm font-semibold text-pink-500">💫 Plein d'amour</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Lightbox Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="closeModal()">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute -top-12 right-0 text-white hover:text-pink-400 text-3xl font-bold transition">&times; Fermer</button>
+            <img id="modalImg" src="" alt="Agrandissement photo" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain border-4 border-white/20">
+            <p id="modalCaption" class="text-white font-medium mt-4 text-lg"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white/60 backdrop-blur-md py-8 text-center text-gray-600 border-t border-purple-100">
+        <p class="font-pacifico text-xl text-pink-600 mb-2">Joyeux 1 an ! 🎂✨</p>
+        <p class="text-sm">Créé par Majoie avec tout l'amour du monde pour cette merveilleuse première année.</p>
+    </footer>
+
+    <!-- JavaScript for Animations & Confetti -->
+    <script>
+        // Trigger celebratory confetti
+        function triggerCelebration() {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ec4899', '#8b5cf6', '#3b82f6', '#f59e0b', '#10b981']
+            });
+        }
+
+        // Blow candle function
+        function blowCandle() {
+            const flame = document.getElementById('candle-flame');
+            flame.style.animation = 'none';
+            flame.style.backgroundColor = '#9ca3af';
+            flame.style.height = '4px';
+            flame.title = 'Bougie soufflée ! 🌬️';
+
+            // Big confetti burst
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.4 },
+                colors: ['#ec4899', '#8b5cf6', '#f59e0b']
+            });
+
+            // Show message
+            setTimeout(() => {
+                alert("Bravo ! La bougie du 1er anniversaire est soufflée ! Que tous tes vœux se réalisent 🎂✨");
+            }, 300);
+        }
+
+        // Modal functions
+        function openModal(imgSrc, captionText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalCaption = document.getElementById('modalCaption');
+
+            modalImg.src = imgSrc;
+            modalCaption.textContent = captionText;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+        }
+
+        // Create floating balloons dynamically
+        const colors = ['bg-pink-400', 'bg-purple-400', 'bg-blue-400', 'bg-amber-400', 'bg-emerald-400'];
+        const container = document.getElementById('balloon-container');
+
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = `balloon ${colors[Math.floor(Math.random() * colors.length)]}`;
+
+            // Random horizontal position
+            const randomX = Math.random() * 100;
+            balloon.style.left = `${randomX}vw`;
+
+            // Random animation duration between 6s and 12s
+            const duration = Math.random() * 6 + 6;
+            balloon.style.animationDuration = `${duration}s`;
+
+            // Random scale
+            const scale = Math.random() * 0.6 + 0.7;
+            balloon.style.transform = `scale(${scale})`;
+
+            container.appendChild(balloon);
+
+            // Remove balloon after animation completes
+            setTimeout(() => {
+                balloon.remove();
+            }, duration * 1000);
+        }
+
+        // Generate balloons periodically (more frequently for a festive look)
+        setInterval(() => {
+            createBalloon();
+            createBalloon();
+        }, 300);
+
+        // Initial burst on load
+        window.onload = () => {
+            setTimeout(triggerCelebration, 500);
+        };
+    </script>
+</body>
+</html>
